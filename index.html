@@ -24,51 +24,145 @@
     background-size: 600% 600%; animation: gradientShift 18s ease infinite;
     font-family: 'Segoe UI', 'Comic Sans MS', cursive, sans-serif;
     cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><text y='18' font-size='18'>♥</text></svg>") 12 12, auto;
-    user-select: none;
+    user-select: none; transition: background 0.8s;
   }
-  @keyframes gradientShift {
-    0% { background-position: 0% 50%; } 25% { background-position: 50% 100%; }
-    50% { background-position: 100% 50%; } 75% { background-position: 50% 0%; } 100% { background-position: 0% 50%; }
-  }
+  body.sad-bg { background: linear-gradient(135deg, #cfd8dc, #d7ccc8, #b0bec5, #d7ccc8); background-size: 600% 600%; animation: gradientShift 18s ease infinite; }
+  body.mage-bg { background: linear-gradient(135deg, #ff80ab, #ea80fc, #8c9eff, #80d8ff, #ff80ab, #ea80fc); background-size: 600% 600%; animation: gradientShift 4s ease infinite; }
+  @keyframes gradientShift { 0% { background-position: 0% 50%; } 25% { background-position: 50% 100%; } 50% { background-position: 100% 50%; } 75% { background-position: 50% 0%; } 100% { background-position: 0% 50%; } }
+
   .bokeh { position: fixed; border-radius: 50%; opacity: 0.25; pointer-events: none; filter: blur(1px); animation: floatBokeh linear infinite; }
-  @keyframes floatBokeh {
-    0% { transform: translateY(110vh) scale(0.5); opacity: 0; } 10% { opacity: 0.25; } 90% { opacity: 0.25; }
-    100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
-  }
+  @keyframes floatBokeh { 0% { transform: translateY(110vh) scale(0.5); opacity: 0; } 10% { opacity: 0.25; } 90% { opacity: 0.25; } 100% { transform: translateY(-10vh) scale(1.2); opacity: 0; } }
+
   .scene { position: relative; display: flex; flex-direction: column; align-items: center; z-index: 1; }
   .ground-shadow { width: 180px; height: 30px; background: radial-gradient(ellipse, rgba(0,0,0,0.1) 0%, transparent 70%); border-radius: 50%; margin-top: -15px; animation: shadowBounce 2s ease-in-out infinite; }
   @keyframes shadowBounce { 0%, 100% { transform: scaleX(1); opacity: 0.8; } 30% { transform: scaleX(0.85); opacity: 0.5; } 60% { transform: scaleX(1.08); opacity: 0.9; } }
+
   .character { position: relative; animation: bounce 2s ease-in-out infinite; cursor: pointer; }
   @keyframes bounce { 0%, 100% { transform: translateY(0) scaleX(1) scaleY(1); } 30% { transform: translateY(-18px) scaleX(0.96) scaleY(1.05); } 60% { transform: translateY(0) scaleX(1.04) scaleY(0.96); } }
   .character:hover { animation: wiggle 0.4s ease-in-out infinite; }
   @keyframes wiggle { 0%, 100% { transform: translateY(-5px) rotate(0deg) scaleX(1.02); } 25% { transform: translateY(-10px) rotate(-4deg) scaleX(0.97) scaleY(1.04); } 50% { transform: translateY(-5px) rotate(0deg) scaleX(1.03) scaleY(0.97); } 75% { transform: translateY(-10px) rotate(4deg) scaleX(0.97) scaleY(1.04); } }
-  .body { width: 280px; height: 260px; background: #ffffff; border-radius: 50% 50% 48% 48%; position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.08), inset 0 -30px 50px rgba(240,220,230,0.15), inset 0 10px 30px rgba(255,255,255,0.8), 0 0 80px rgba(255,200,220,0.15); z-index: 2; }
+  .character.sad-mode { animation: sadBounce 3s ease-in-out infinite; }
+  .character.sad-mode:hover { animation: sadBounce 3s ease-in-out infinite; }
+  @keyframes sadBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+  .character.mage-mode { animation: mageFloat 0.8s ease-in-out infinite; }
+  .character.mage-mode:hover { animation: mageFloat 0.6s ease-in-out infinite; }
+  @keyframes mageFloat { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-30px) scale(1.06); } }
+  .character.squish { animation: squish 0.5s ease-out !important; }
+  @keyframes squish { 0% { transform: scaleX(1) scaleY(1); } 20% { transform: scaleX(1.25) scaleY(0.7); } 40% { transform: scaleX(0.9) scaleY(1.15); } 60% { transform: scaleX(1.08) scaleY(0.93); } 80% { transform: scaleX(0.98) scaleY(1.03); } 100% { transform: scaleX(1) scaleY(1); } }
+
+  .body { width: 280px; height: 260px; background: #ffffff; border-radius: 50% 50% 48% 48%; position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.08), inset 0 -30px 50px rgba(240,220,230,0.15), inset 0 10px 30px rgba(255,255,255,0.8), 0 0 80px rgba(255,200,220,0.15); z-index: 2; transition: box-shadow 0.5s; }
+  .mage-mode .body { box-shadow: 0 0 60px rgba(255,100,200,0.5), 0 0 120px rgba(150,100,255,0.3), 0 20px 60px rgba(0,0,0,0.08); }
+
+  /* === GIANT BOW === */
+  .bow { position: absolute; top: -58px; left: 50%; transform: translateX(-50%); z-index: 10; filter: drop-shadow(0 4px 10px rgba(200,0,80,0.25)); }
+  .bow-wrap { position: relative; width: 200px; height: 85px; animation: bowBob 2s ease-in-out infinite; }
+  @keyframes bowBob { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
+  .mage-mode .bow-wrap { animation: bowSpin 0.8s ease-in-out infinite; }
+  @keyframes bowSpin { 0%, 100% { transform: rotate(-6deg) scale(1); } 50% { transform: rotate(6deg) scale(1.12); } }
+  .bow-loop { position: absolute; width: 85px; height: 65px; top: 50%; transform: translateY(-50%); border-radius: 50%; box-shadow: inset 0 -8px 15px rgba(0,0,0,0.12), inset 0 5px 10px rgba(255,255,255,0.3); }
+  .bow-loop.l { right: 50%; background: linear-gradient(140deg, #ff80ab, #f50057, #ff4081); border-radius: 50% 30% 50% 50%; transform: translateY(-50%) rotate(-12deg); }
+  .bow-loop.r { left: 50%; background: linear-gradient(140deg, #ff80ab, #f50057, #ff4081); border-radius: 30% 50% 50% 50%; transform: translateY(-50%) rotate(12deg); }
+  .bow-loop::after { content: ''; position: absolute; width: 40%; height: 25%; background: rgba(255,255,255,0.25); border-radius: 50%; top: 18%; left: 22%; }
+  .bow-knot { width: 34px; height: 28px; background: radial-gradient(ellipse, #ff5c8d, #e91e63); border-radius: 50%; position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); z-index: 3; box-shadow: inset 0 -4px 8px rgba(0,0,0,0.15); }
+  .bow-ribbon { position: absolute; width: 28px; height: 48px; background: linear-gradient(180deg, #f50057, #c51162); top: 60%; left: 50%; transform-origin: top center; z-index: 1; }
+  .bow-ribbon.bl { transform: translateX(-22px) rotate(-22deg); border-radius: 0 0 40% 60%; clip-path: polygon(30% 0%, 100% 0%, 75% 100%, 0% 85%); }
+  .bow-ribbon.br { transform: translateX(-6px) rotate(22deg); border-radius: 0 0 60% 40%; clip-path: polygon(0% 0%, 70% 0%, 100% 85%, 25% 100%); }
+  .mage-mode .bow-loop { animation: bowRainbow 1s linear infinite; }
+  @keyframes bowRainbow { 0% { filter: hue-rotate(0deg); } 100% { filter: hue-rotate(360deg); } }
+
   .ear { position: absolute; width: 50px; height: 50px; background: #ffffff; border-radius: 50%; top: -15px; box-shadow: inset 0 -5px 15px rgba(240,200,210,0.2), 0 2px 10px rgba(0,0,0,0.05); z-index: 1; }
   .ear.left { left: 30px; } .ear.right { right: 30px; }
   .ear-inner { position: absolute; width: 28px; height: 28px; background: rgba(255,180,190,0.35); border-radius: 50%; top: 12px; left: 11px; }
+
   .eye { position: absolute; top: 75px; width: 58px; height: 58px; z-index: 3; animation: blink 4s ease-in-out infinite; }
   .eye.left { left: 60px; } .eye.right { right: 60px; }
   @keyframes blink { 0%, 92%, 100% { transform: scaleY(1); } 95%, 97% { transform: scaleY(0.05); } }
   .eye svg { width: 100%; height: 100%; }
   .eye-sparkle { animation: eyeSparkle 1.5s ease-in-out infinite; }
-  @keyframes eyeSparkle { 0%, 100% { opacity: 0.9; } 50% { opacity: 1; r: 6; } }
+  @keyframes eyeSparkle { 0%, 100% { opacity: 0.9; } 50% { opacity: 1; } }
+
+  /* Sad eyes */
+  .sad-mode .eye { animation: none; }
+  .sad-mode .eye svg { opacity: 0; }
+  .sad-eye { display: none; position: absolute; top: 75px; width: 58px; height: 58px; z-index: 4; }
+  .sad-eye.left { left: 60px; } .sad-eye.right { right: 60px; }
+  .sad-mode .sad-eye { display: block; }
+
+  /* Mage eyes */
+  .mage-eye-fx { display: none; position: absolute; top: 75px; width: 58px; height: 58px; z-index: 5; pointer-events: none; }
+  .mage-eye-fx.left { left: 60px; } .mage-eye-fx.right { right: 60px; }
+  .mage-mode .mage-eye-fx { display: block; animation: mageEyePulse 0.5s ease-in-out infinite; }
+  @keyframes mageEyePulse { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.2); opacity: 1; } }
+
+  .tear { display: none; position: absolute; z-index: 5; }
+  .sad-mode .tear { display: block; animation: tearDrop 1.8s ease-in infinite; }
+  .tear.left { top: 128px; left: 72px; } .tear.right { top: 128px; right: 72px; animation-delay: 0.9s !important; }
+  @keyframes tearDrop { 0% { transform: translateY(0) scale(1); opacity: 0.7; } 100% { transform: translateY(55px) scale(0.4); opacity: 0; } }
+
   .blush { position: absolute; width: 42px; height: 24px; background: rgba(255, 150, 170, 0.4); border-radius: 50%; top: 135px; filter: blur(4px); z-index: 3; animation: blushPulse 2.5s ease-in-out infinite; }
   .blush.left { left: 35px; } .blush.right { right: 35px; }
   .character:hover .blush { background: rgba(255, 130, 160, 0.65); }
   @keyframes blushPulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 0.9; } }
-  .mouth { position: absolute; top: 155px; left: 50%; transform: translateX(-50%); z-index: 3; transition: transform 0.2s ease; }
+  .sad-mode .blush { background: rgba(150,150,180,0.25); }
+  .mage-mode .blush { background: rgba(255,80,180,0.7); width: 52px; height: 28px; filter: blur(6px); }
+
+  .mouth { position: absolute; top: 155px; left: 50%; transform: translateX(-50%); z-index: 3; transition: transform 0.2s; }
   .character:hover .mouth { transform: translateX(-50%) scaleX(1.3) scaleY(1.1); }
-  .arm { position: absolute; width: 55px; height: 40px; background: #ffffff; border-radius: 50%; top: 160px; z-index: 1; box-shadow: 0 5px 15px rgba(0,0,0,0.05), inset 0 -5px 10px rgba(240,220,230,0.1); }
+  .sad-mouth { display: none; position: absolute; top: 158px; left: 50%; transform: translateX(-50%); z-index: 3; }
+  .sad-mode .mouth { display: none; } .sad-mode .sad-mouth { display: block; }
+  .mage-mouth { display: none; position: absolute; top: 146px; left: 50%; transform: translateX(-50%); z-index: 3; }
+  .mage-mode .mouth { display: none; } .mage-mode .mage-mouth { display: block; }
+
+  .arm { position: absolute; width: 55px; height: 40px; background: #ffffff; border-radius: 50%; top: 160px; z-index: 1; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
   .arm.left { left: -20px; animation: waveLeft 3s ease-in-out infinite; transform-origin: right center; }
   .arm.right { right: -20px; animation: waveRight 3s ease-in-out infinite 0.5s; transform-origin: left center; }
   @keyframes waveLeft { 0%, 100% { transform: rotate(-5deg); } 50% { transform: rotate(12deg); } }
   @keyframes waveRight { 0%, 100% { transform: rotate(5deg); } 50% { transform: rotate(-12deg); } }
+  .sad-mode .arm.left, .sad-mode .arm.right { animation: none; transform: rotate(5deg); }
+  .mage-mode .arm.left { animation: mageArmL 0.6s ease-in-out infinite; }
+  .mage-mode .arm.right { animation: mageArmR 0.6s ease-in-out infinite; }
+  @keyframes mageArmL { 0%, 100% { transform: rotate(-20deg) translateY(-5px); } 50% { transform: rotate(15deg) translateY(-10px); } }
+  @keyframes mageArmR { 0%, 100% { transform: rotate(20deg) translateY(-5px); } 50% { transform: rotate(-15deg) translateY(-10px); } }
+
   .foot { position: absolute; width: 52px; height: 32px; background: #ffffff; border-radius: 50%; bottom: -10px; z-index: 1; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
   .foot.left { left: 50px; } .foot.right { right: 50px; }
   .tail { position: absolute; width: 30px; height: 30px; background: #ffffff; border-radius: 50%; bottom: 30px; right: -10px; z-index: 0; box-shadow: 0 3px 10px rgba(0,0,0,0.05); animation: tailWag 1.5s ease-in-out infinite; transform-origin: left center; }
   @keyframes tailWag { 0%, 100% { transform: rotate(-10deg) scale(1); } 50% { transform: rotate(15deg) scale(1.05); } }
-  .label { margin-top: 20px; font-size: 22px; color: rgba(180, 130, 160, 0.7); letter-spacing: 4px; font-weight: 300; animation: labelPulse 3s ease-in-out infinite; }
+  .sad-mode .tail { animation: none; transform: rotate(-15deg); }
+  .mage-mode .tail { animation: mageTail 0.4s ease-in-out infinite; }
+  @keyframes mageTail { 0%, 100% { transform: rotate(-18deg) scale(1.1); } 50% { transform: rotate(22deg) scale(1.2); } }
+
+  .label { margin-top: 22px; font-size: 22px; color: rgba(180,130,160,0.7); letter-spacing: 4px; font-weight: 300; animation: labelPulse 3s ease-in-out infinite; min-height: 36px; transition: color 0.4s; }
   @keyframes labelPulse { 0%, 100% { opacity: 0.6; transform: scale(1); } 50% { opacity: 1; transform: scale(1.05); } }
+  .label.sad { color: rgba(120,120,140,0.55); }
+  .label.mage { color: #ff4081; font-size: 24px; font-weight: 700; letter-spacing: 5px; text-shadow: 0 0 20px rgba(255,64,129,0.5), 0 0 40px rgba(234,128,252,0.3); animation: mageLabelPulse 0.5s ease-in-out infinite; }
+  @keyframes mageLabelPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.12); } }
+
+  /* UI */
+  .cupcake-btn { position: fixed; bottom: 28px; right: 28px; z-index: 20; background: none; border: none; cursor: pointer; font-size: 50px; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15)); transition: transform 0.15s; animation: cupcakeIdle 2s ease-in-out infinite; }
+  .cupcake-btn:hover { transform: scale(1.25) rotate(-8deg); }
+  .cupcake-btn:active { transform: scale(0.85); }
+  @keyframes cupcakeIdle { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+  .feed-label { position: fixed; bottom: 10px; right: 18px; z-index: 20; font-size: 12px; color: rgba(180,130,160,0.65); letter-spacing: 1px; width: 80px; text-align: center; }
+  .cupcake-count { position: fixed; bottom: 82px; right: 28px; z-index: 20; font-size: 15px; color: rgba(180,130,160,0.75); font-weight: 600; text-align: center; width: 66px; }
+  .hunger-bar { position: fixed; bottom: 28px; left: 28px; z-index: 20; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+  .hunger-track { width: 14px; height: 110px; background: rgba(0,0,0,0.05); border-radius: 10px; overflow: hidden; position: relative; border: 2px solid rgba(0,0,0,0.04); }
+  .hunger-fill { position: absolute; bottom: 0; width: 100%; background: linear-gradient(to top, #ff80ab, #ff4081); border-radius: 0 0 7px 7px; transition: height 0.3s, background 0.3s; }
+  .hunger-fill.low { background: linear-gradient(to top, #90a4ae, #78909c); }
+  .hunger-fill.mage { background: linear-gradient(to top, #ea80fc, #d500f9, #651fff); animation: mageBar 0.5s linear infinite; }
+  @keyframes mageBar { 0% { filter: hue-rotate(0deg); } 100% { filter: hue-rotate(360deg); } }
+  .hunger-icon { font-size: 18px; }
+
+  .flying-cupcake { position: fixed; font-size: 34px; z-index: 25; pointer-events: none; }
+  .mage-ring { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0); width: 500px; height: 500px; border-radius: 50%; border: 4px solid rgba(255,100,200,0.4); pointer-events: none; z-index: 15; opacity: 0; }
+  .mage-ring.blast { animation: ringBlast 1s ease-out forwards; }
+  @keyframes ringBlast { 0% { transform: translate(-50%,-50%) scale(0); opacity: 0.7; border-width: 5px; } 100% { transform: translate(-50%,-50%) scale(2.5); opacity: 0; border-width: 1px; } }
+  .mage-star { position: fixed; pointer-events: none; z-index: 14; animation: starBurst 2s ease-out forwards; }
+  @keyframes starBurst { 0% { transform: scale(0) rotate(0deg); opacity: 1; } 50% { opacity: 0.7; } 100% { transform: scale(1.5) rotate(360deg); opacity: 0; } }
+  .flash-overlay { position: fixed; inset: 0; background: white; z-index: 30; opacity: 0; pointer-events: none; }
+  .flash-overlay.active { animation: flash 0.5s ease-out forwards; }
+  @keyframes flash { 0% { opacity: 0.85; } 100% { opacity: 0; } }
+
   #particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
   .particle { position: absolute; pointer-events: none; z-index: 10; }
   .particle.heart { font-size: 20px; animation: floatUp 2.5s ease-out forwards; }
@@ -78,146 +172,167 @@
   .particle.sparkle::after { width: 30%; height: 100%; top: 0; left: 35%; }
   @keyframes floatUp { 0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; } 100% { transform: translateY(-140px) scale(0.4) rotate(25deg); opacity: 0; } }
   @keyframes sparkleAnim { 0% { transform: scale(0) rotate(0deg); opacity: 1; } 50% { transform: scale(1.5) rotate(90deg); opacity: 0.8; } 100% { transform: scale(0) rotate(180deg); opacity: 0; } }
-  .character.squish { animation: squish 0.5s ease-out; }
-  @keyframes squish { 0% { transform: scaleX(1) scaleY(1); } 20% { transform: scaleX(1.25) scaleY(0.7); } 40% { transform: scaleX(0.9) scaleY(1.15); } 60% { transform: scaleX(1.08) scaleY(0.93); } 80% { transform: scaleX(0.98) scaleY(1.03); } 100% { transform: scaleX(1) scaleY(1); } }
   .eye-highlight-main, .eye-highlight-small { transition: transform 0.15s ease-out; }
+
   @media (max-width: 500px) {
-    .character { transform-origin: center center; } .body { width: 200px; height: 186px; }
+    .body { width: 200px; height: 186px; }
     .eye { width: 42px; height: 42px; top: 52px; } .eye.left { left: 42px; } .eye.right { right: 42px; }
+    .sad-eye { width: 42px; height: 42px; top: 52px; } .sad-eye.left { left: 42px; } .sad-eye.right { right: 42px; }
+    .mage-eye-fx { width: 42px; height: 42px; top: 52px; } .mage-eye-fx.left { left: 42px; } .mage-eye-fx.right { right: 42px; }
     .blush { top: 96px; width: 32px; height: 18px; } .blush.left { left: 24px; } .blush.right { right: 24px; }
-    .mouth { top: 110px; } .arm { width: 40px; height: 30px; top: 115px; }
+    .mouth { top: 110px; } .sad-mouth { top: 113px; } .mage-mouth { top: 105px; }
+    .arm { width: 40px; height: 30px; top: 115px; }
     .foot { width: 38px; height: 24px; } .foot.left { left: 34px; } .foot.right { right: 34px; }
     .ear { width: 36px; height: 36px; top: -10px; } .ear.left { left: 20px; } .ear.right { right: 20px; }
     .ear-inner { width: 20px; height: 20px; top: 8px; left: 8px; } .tail { width: 22px; height: 22px; }
     .ground-shadow { width: 130px; } .label { font-size: 18px; }
+    .bow { top: -44px; } .bow-wrap { width: 150px; height: 65px; }
+    .bow-loop { width: 64px; height: 48px; } .bow-knot { width: 26px; height: 22px; }
+    .tear.left { top: 92px; left: 52px; } .tear.right { top: 92px; right: 52px; }
+    .cupcake-btn { font-size: 40px; bottom: 18px; right: 14px; }
   }
 </style>
 </head>
 <body>
 <div id="particles"></div>
+<div class="flash-overlay" id="flash"></div>
+<div class="mage-ring" id="ring"></div>
+
 <div class="scene">
-  <div class="character" id="character">
+  <div class="character" id="char">
     <div class="body">
+      <div class="bow"><div class="bow-wrap">
+        <div class="bow-loop l"></div><div class="bow-loop r"></div>
+        <div class="bow-knot"></div>
+        <div class="bow-ribbon bl"></div><div class="bow-ribbon br"></div>
+      </div></div>
       <div class="ear left"><div class="ear-inner"></div></div>
       <div class="ear right"><div class="ear-inner"></div></div>
-      <div class="eye left" id="eyeLeft">
-        <svg viewBox="0 0 58 58">
-          <defs><radialGradient id="eyeGrad" cx="50%" cy="45%" r="50%"><stop offset="0%" stop-color="#1a1a2e"/><stop offset="100%" stop-color="#2d2d44"/></radialGradient></defs>
-          <circle cx="29" cy="29" r="27" fill="url(#eyeGrad)"/>
-          <ellipse class="eye-highlight-main" cx="20" cy="18" rx="9" ry="7" fill="white" opacity="0.95"/>
-          <circle class="eye-highlight-small eye-sparkle" cx="36" cy="36" r="5" fill="white" opacity="0.8"/>
-          <circle cx="14" cy="12" r="2.5" fill="white" opacity="0.4"/>
-        </svg>
-      </div>
-      <div class="eye right" id="eyeRight">
-        <svg viewBox="0 0 58 58">
-          <circle cx="29" cy="29" r="27" fill="url(#eyeGrad)"/>
-          <ellipse class="eye-highlight-main" cx="20" cy="18" rx="9" ry="7" fill="white" opacity="0.95"/>
-          <circle class="eye-highlight-small eye-sparkle" cx="36" cy="36" r="5" fill="white" opacity="0.8"/>
-          <circle cx="14" cy="12" r="2.5" fill="white" opacity="0.4"/>
-        </svg>
-      </div>
-      <div class="blush left"></div>
-      <div class="blush right"></div>
-      <div class="mouth">
-        <svg width="30" height="14" viewBox="0 0 30 14">
-          <path d="M3,3 Q8,12 15,5 Q22,12 27,3" fill="none" stroke="#e8a0a8" stroke-width="2.5" stroke-linecap="round"/>
-        </svg>
-      </div>
+      <div class="eye left"><svg viewBox="0 0 58 58"><defs><radialGradient id="eg" cx="50%" cy="45%" r="50%"><stop offset="0%" stop-color="#1a1a2e"/><stop offset="100%" stop-color="#2d2d44"/></radialGradient></defs><circle cx="29" cy="29" r="27" fill="url(#eg)"/><ellipse class="eye-highlight-main" cx="20" cy="18" rx="9" ry="7" fill="white" opacity="0.95"/><circle class="eye-highlight-small eye-sparkle" cx="36" cy="36" r="5" fill="white" opacity="0.8"/><circle cx="14" cy="12" r="2.5" fill="white" opacity="0.4"/></svg></div>
+      <div class="eye right"><svg viewBox="0 0 58 58"><circle cx="29" cy="29" r="27" fill="url(#eg)"/><ellipse class="eye-highlight-main" cx="20" cy="18" rx="9" ry="7" fill="white" opacity="0.95"/><circle class="eye-highlight-small eye-sparkle" cx="36" cy="36" r="5" fill="white" opacity="0.8"/><circle cx="14" cy="12" r="2.5" fill="white" opacity="0.4"/></svg></div>
+      <div class="sad-eye left"><svg viewBox="0 0 58 58"><circle cx="29" cy="29" r="27" fill="#2d2d44"/><ellipse cx="29" cy="22" rx="14" ry="9" fill="white" opacity="0.9"/><circle cx="22" cy="18" rx="4" fill="white" opacity="0.4"/></svg></div>
+      <div class="sad-eye right"><svg viewBox="0 0 58 58"><circle cx="29" cy="29" r="27" fill="#2d2d44"/><ellipse cx="29" cy="22" rx="14" ry="9" fill="white" opacity="0.9"/><circle cx="22" cy="18" rx="4" fill="white" opacity="0.4"/></svg></div>
+      <div class="mage-eye-fx left"><svg viewBox="0 0 58 58"><polygon points="29,0 34,22 56,22 38,35 44,57 29,44 14,57 20,35 2,22 24,22" fill="rgba(255,200,255,0.25)" stroke="rgba(255,100,255,0.5)" stroke-width="1.5"/></svg></div>
+      <div class="mage-eye-fx right"><svg viewBox="0 0 58 58"><polygon points="29,0 34,22 56,22 38,35 44,57 29,44 14,57 20,35 2,22 24,22" fill="rgba(255,200,255,0.25)" stroke="rgba(255,100,255,0.5)" stroke-width="1.5"/></svg></div>
+      <div class="tear left"><svg width="10" height="16"><ellipse cx="5" cy="10" rx="4" ry="5" fill="rgba(100,180,255,0.55)"/></svg></div>
+      <div class="tear right"><svg width="10" height="16"><ellipse cx="5" cy="10" rx="4" ry="5" fill="rgba(100,180,255,0.55)"/></svg></div>
+      <div class="blush left"></div><div class="blush right"></div>
+      <div class="mouth"><svg width="30" height="14" viewBox="0 0 30 14"><path d="M3,3 Q8,12 15,5 Q22,12 27,3" fill="none" stroke="#e8a0a8" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+      <div class="sad-mouth"><svg width="28" height="12" viewBox="0 0 28 12"><path d="M4,10 Q14,1 24,10" fill="none" stroke="#9e9e9e" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+      <div class="mage-mouth"><svg width="46" height="28" viewBox="0 0 46 28"><path d="M4,4 Q23,32 42,4" fill="#e8a0a8" stroke="#d4808a" stroke-width="2" stroke-linecap="round"/><path d="M13,7 Q23,2 33,7" fill="white" opacity="0.85"/></svg></div>
       <div class="tail"></div>
     </div>
-    <div class="arm left"></div>
-    <div class="arm right"></div>
-    <div class="foot left"></div>
-    <div class="foot right"></div>
+    <div class="arm left"></div><div class="arm right"></div>
+    <div class="foot left"></div><div class="foot right"></div>
   </div>
   <div class="ground-shadow"></div>
-  <p class="label">hewwo ♡</p>
+  <p class="label" id="label">hewwo ♡</p>
 </div>
+
+<div class="hunger-bar"><div class="hunger-icon" id="hIcon">🧁</div><div class="hunger-track"><div class="hunger-fill" id="hFill" style="height:50%"></div></div></div>
+<div class="cupcake-count" id="cCount"></div>
+<button class="cupcake-btn" id="cBtn" title="Feed cupcake!">🧁</button>
+<div class="feed-label">feed me!</div>
+
 <script>
-  const character = document.getElementById('character');
-  const particleContainer = document.getElementById('particles');
-  const heartColors = ['#ffb3ba','#ffdfba','#ffffba','#baffc9','#bae1ff','#e8b3ff','#ffb3de'];
-  const sparkleColors = ['#ffd700','#ff69b4','#87ceeb','#dda0dd','#ffa07a','#98fb98'];
-  const hearts = ['♥','♡','❤','💕','💖','💗','✿','🌸'];
-  let particleCount = 0; const MAX_PARTICLES = 40;
+const C = document.getElementById('char'), P = document.getElementById('particles'), L = document.getElementById('label');
+const hFill = document.getElementById('hFill'), hIcon = document.getElementById('hIcon');
+const cBtn = document.getElementById('cBtn'), cCount = document.getElementById('cCount');
+const flash = document.getElementById('flash'), ring = document.getElementById('ring');
 
-  function createBokeh() {
-    const colors = ['#ffcdd2','#f8bbd0','#e1bee7','#c5cae9','#b3e5fc','#c8e6c9','#fff9c4','#ffe0b2'];
-    for (let i = 0; i < 15; i++) {
-      const b = document.createElement('div'); b.className = 'bokeh';
-      const size = 10 + Math.random() * 40;
-      b.style.width = size + 'px'; b.style.height = size + 'px';
-      b.style.left = Math.random() * 100 + 'vw';
-      b.style.background = colors[Math.floor(Math.random() * colors.length)];
-      b.style.animationDuration = (8 + Math.random() * 12) + 's';
-      b.style.animationDelay = (-Math.random() * 20) + 's';
-      document.body.appendChild(b);
-    }
+const hcol = ['#ffb3ba','#ffdfba','#ffffba','#baffc9','#bae1ff','#e8b3ff','#ffb3de'];
+const scol = ['#ffd700','#ff69b4','#87ceeb','#dda0dd','#ffa07a','#98fb98'];
+const hrt = ['♥','♡','❤','💕','💖','💗','✿','🌸'];
+const mhrt = ['⭐','✨','💫','🌟','💖','💜','🔮','🌙','🪄'];
+const mstars = ['✦','✧','⟡','✶','❋','✺','★'];
+let pc = 0; const MX = 60;
+
+let hunger = 50, cupcakes = 0, state = 'normal', mageInt = null;
+
+// Bokeh
+(function(){const c=['#ffcdd2','#f8bbd0','#e1bee7','#c5cae9','#b3e5fc','#c8e6c9','#fff9c4','#ffe0b2'];for(let i=0;i<15;i++){const b=document.createElement('div');b.className='bokeh';const s=10+Math.random()*40;b.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}vw;background:${c[~~(Math.random()*c.length)]};animation-duration:${8+Math.random()*12}s;animation-delay:${-Math.random()*20}s`;document.body.appendChild(b)}})();
+
+function spawn(cls, x, y, txt, sz, col, dur) {
+  if (pc >= MX) return;
+  const el = document.createElement('div'); el.className = 'particle ' + cls;
+  if (txt) el.textContent = txt;
+  el.style.left = (x + (Math.random()-.5)*80) + 'px';
+  el.style.top = (y + (Math.random()-.5)*40) + 'px';
+  if (sz) el.style.fontSize = sz + 'px';
+  if (col) el.style.color = col;
+  if (cls === 'sparkle') { const s = 6+Math.random()*8; el.style.width=s+'px'; el.style.height=s+'px'; }
+  el.style.animationDuration = (dur||2) + 's';
+  P.appendChild(el); pc++;
+  el.addEventListener('animationend', () => { el.remove(); pc--; });
+}
+function sH(x,y) { const pool = state==='mage'?mhrt:hrt; spawn('heart',x,y,pool[~~(Math.random()*pool.length)],14+Math.random()*(state==='mage'?28:18),hcol[~~(Math.random()*hcol.length)],1.8+Math.random()*1.5); }
+function sS(x,y) { spawn('sparkle',x,y,null,null,scol[~~(Math.random()*scol.length)],0.8+Math.random()*0.8); }
+function sStar() { const el=document.createElement('div');el.className='mage-star';el.textContent=mstars[~~(Math.random()*mstars.length)];el.style.left=Math.random()*innerWidth+'px';el.style.top=Math.random()*innerHeight+'px';el.style.fontSize=(22+Math.random()*28)+'px';el.style.color=['#ff80ab','#ea80fc','#8c9eff','#80d8ff','#ffd54f'][~~(Math.random()*5)];document.body.appendChild(el);el.addEventListener('animationend',()=>el.remove()); }
+function blastRing() { ring.classList.remove('blast');void ring.offsetWidth;ring.classList.add('blast');setTimeout(()=>ring.classList.remove('blast'),1000); }
+
+setInterval(() => { if (state==='sad') return; const r=C.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2; sH(cx,cy-30); if(Math.random()>.4)sS(cx,cy); }, 1200);
+
+let hb=false;
+C.addEventListener('mouseenter', () => { if(hb||state==='sad')return; hb=true; const r=C.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2; for(let i=0;i<8;i++)setTimeout(()=>{sH(cx,cy-20);sS(cx,cy)},i*60); });
+C.addEventListener('mouseleave', () => { hb=false; });
+C.addEventListener('click', () => {
+  C.classList.remove('squish');void C.offsetWidth;C.classList.add('squish');setTimeout(()=>C.classList.remove('squish'),500);
+  const r=C.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
+  for(let i=0;i<(state==='mage'?22:15);i++)setTimeout(()=>{sH(cx,cy-30);sS(cx,cy-10)},i*35);
+  if(state==='mage') blastRing();
+});
+document.addEventListener('mousemove', e => {
+  const r=C.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height*.35;
+  const dx=Math.max(-3.5,Math.min(3.5,(e.clientX-cx)/innerWidth*5));
+  const dy=Math.max(-2.5,Math.min(2.5,(e.clientY-cy)/innerHeight*4));
+  document.querySelectorAll('.eye-highlight-main,.eye-highlight-small').forEach(h=>{h.style.transform=`translate(${dx}px,${dy}px)`});
+});
+C.addEventListener('touchstart', e => { e.preventDefault(); C.click(); }, { passive: false });
+
+// Feed
+cBtn.addEventListener('click', () => {
+  const br=cBtn.getBoundingClientRect(); const el=document.createElement('div');el.className='flying-cupcake';el.textContent='🧁';el.style.left=br.left+'px';el.style.top=br.top+'px';
+  const cr=C.getBoundingClientRect();const tx=cr.left+cr.width/2-17,ty=cr.top+cr.height/2-17;
+  el.style.transition='left .45s ease-in,top .45s ease-in,transform .45s,opacity .45s';
+  document.body.appendChild(el);
+  requestAnimationFrame(()=>{el.style.left=tx+'px';el.style.top=ty+'px';el.style.transform='scale(.2) rotate(360deg)';el.style.opacity='0'});
+  setTimeout(()=>el.remove(),500);
+  hunger=Math.min(100,hunger+15); cupcakes++;
+  upd();
+});
+
+setInterval(() => { hunger=Math.max(0,hunger-2); upd(); }, 2500);
+
+const sadL=['...hungry :(','need cupcake...','*sniff*','pwease feed me','so empty...'];
+const hapL=['hewwo ♡','hehe~','*happy noises*','nyaa~ ♡','ily fren ♡'];
+const magL=['✨ LOVE BEAM ✨','💖 MAGE MODE 💖','🌟 FULL POWER 🌟','⭐ CUPCAKE POWER ⭐','🔮 MAGICAL FREN 🔮'];
+
+function upd() {
+  const prev = state;
+  state = hunger >= 85 ? 'mage' : hunger <= 20 ? 'sad' : 'normal';
+  hFill.style.height = hunger+'%';
+  hFill.className = 'hunger-fill' + (state==='sad'?' low':'') + (state==='mage'?' mage':'');
+  hIcon.textContent = state==='sad'?'😿':state==='mage'?'🔮':'🧁';
+  cCount.textContent = cupcakes>0 ? '×'+cupcakes : '';
+  C.classList.toggle('sad-mode', state==='sad');
+  C.classList.toggle('mage-mode', state==='mage');
+  document.body.classList.toggle('sad-bg', state==='sad');
+  document.body.classList.toggle('mage-bg', state==='mage');
+
+  if (state==='sad') { L.className='label sad'; L.textContent=sadL[~~(Math.random()*sadL.length)]; }
+  else if (state==='mage') { L.className='label mage'; L.textContent=magL[~~(Math.random()*magL.length)]; }
+  else { L.className='label'; L.textContent=hapL[~~(Math.random()*hapL.length)]; }
+
+  if (state==='mage' && prev!=='mage') {
+    flash.classList.remove('active');void flash.offsetWidth;flash.classList.add('active');
+    blastRing();
+    const r=C.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
+    for(let i=0;i<28;i++)setTimeout(()=>{sH(cx,cy-40);sS(cx,cy);sStar()},i*45);
+    if(!mageInt) mageInt=setInterval(()=>{if(state!=='mage'){clearInterval(mageInt);mageInt=null;return}sStar();const r2=C.getBoundingClientRect();sH(r2.left+r2.width/2,r2.top);sS(r2.left+r2.width/2,r2.top+r2.height/2);if(Math.random()>.7)blastRing()},350);
   }
-  createBokeh();
-
-  function spawnHeart(x, y) {
-    if (particleCount >= MAX_PARTICLES) return;
-    const el = document.createElement('div'); el.className = 'particle heart';
-    el.textContent = hearts[Math.floor(Math.random() * hearts.length)];
-    el.style.left = (x + (Math.random() - 0.5) * 80) + 'px';
-    el.style.top = (y + (Math.random() - 0.5) * 40) + 'px';
-    el.style.fontSize = (14 + Math.random() * 18) + 'px';
-    el.style.color = heartColors[Math.floor(Math.random() * heartColors.length)];
-    el.style.animationDuration = (1.8 + Math.random() * 1.5) + 's';
-    particleContainer.appendChild(el); particleCount++;
-    el.addEventListener('animationend', () => { el.remove(); particleCount--; });
-  }
-
-  function spawnSparkle(x, y) {
-    if (particleCount >= MAX_PARTICLES) return;
-    const el = document.createElement('div'); el.className = 'particle sparkle';
-    el.style.left = (x + (Math.random() - 0.5) * 100) + 'px';
-    el.style.top = (y + (Math.random() - 0.5) * 60) + 'px';
-    el.style.color = sparkleColors[Math.floor(Math.random() * sparkleColors.length)];
-    el.style.animationDuration = (0.8 + Math.random() * 0.8) + 's';
-    const size = 6 + Math.random() * 8;
-    el.style.width = size + 'px'; el.style.height = size + 'px';
-    particleContainer.appendChild(el); particleCount++;
-    el.addEventListener('animationend', () => { el.remove(); particleCount--; });
-  }
-
-  setInterval(() => {
-    const rect = character.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2, cy = rect.top + rect.height / 2;
-    spawnHeart(cx, cy - 30);
-    if (Math.random() > 0.4) spawnSparkle(cx, cy);
-  }, 1200);
-
-  let hoverBurst = false;
-  character.addEventListener('mouseenter', () => {
-    if (hoverBurst) return; hoverBurst = true;
-    const rect = character.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2, cy = rect.top + rect.height / 2;
-    for (let i = 0; i < 8; i++) setTimeout(() => { spawnHeart(cx, cy - 20); spawnSparkle(cx, cy); }, i * 60);
-  });
-  character.addEventListener('mouseleave', () => { hoverBurst = false; });
-
-  character.addEventListener('click', () => {
-    character.classList.remove('squish'); void character.offsetWidth; character.classList.add('squish');
-    setTimeout(() => character.classList.remove('squish'), 500);
-    const rect = character.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2, cy = rect.top + rect.height / 2;
-    for (let i = 0; i < 15; i++) setTimeout(() => { spawnHeart(cx, cy - 30); spawnSparkle(cx, cy - 10); }, i * 40);
-  });
-
-  document.addEventListener('mousemove', (e) => {
-    const rect = character.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2, cy = rect.top + rect.height * 0.35;
-    const dx = Math.max(-3.5, Math.min(3.5, (e.clientX - cx) / window.innerWidth * 5));
-    const dy = Math.max(-2.5, Math.min(2.5, (e.clientY - cy) / window.innerHeight * 4));
-    document.querySelectorAll('.eye-highlight-main, .eye-highlight-small').forEach(h => {
-      h.style.transform = `translate(${dx}px, ${dy}px)`;
-    });
-  });
-
-  character.addEventListener('touchstart', (e) => { e.preventDefault(); character.click(); }, { passive: false });
+  if(state!=='mage'&&mageInt){clearInterval(mageInt);mageInt=null}
+}
+upd();
 </script>
 </body>
 </html>
